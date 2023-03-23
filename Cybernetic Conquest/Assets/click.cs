@@ -3,6 +3,11 @@ using UnityEngine.UI;
 
 public class click : MonoBehaviour
 {
+    public CameraShake camerashake;
+
+    public ParticleSystem particles_broken;
+    public ParticleSystem particles_proto;
+
     public Text workersText;
     public Text scientistsText;
     public Text armyText;
@@ -57,7 +62,6 @@ public class click : MonoBehaviour
 
     private void Update()
     {
-
         decimalMoney += workers * Time.deltaTime;
         money = Mathf.RoundToInt(decimalMoney);
 
@@ -110,6 +114,11 @@ public class click : MonoBehaviour
             decimalMoney -= brokenCost;
             brokenCost = Mathf.RoundToInt(brokenCost * 1.3f);
             robots++;
+            particles_broken.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
         }
     }
 
@@ -121,6 +130,11 @@ public class click : MonoBehaviour
             decimalMoney -= protoCost;
             protoCost = Mathf.RoundToInt(protoCost * 1.3f);
             robots += 10;
+            particles_proto.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
         }
     }
 
