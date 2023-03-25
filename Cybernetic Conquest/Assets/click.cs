@@ -8,6 +8,17 @@ public class click : MonoBehaviour
     public ParticleSystem particles_broken;
     public ParticleSystem particles_proto;
 
+    public ParticleSystem particles_money;
+
+    public ParticleSystem particles_workers_plus;
+    public ParticleSystem particles_workers_minus;
+
+    public ParticleSystem particles_scientists_plus;
+    public ParticleSystem particles_scientists_minus;
+
+    public ParticleSystem particles_army_plus;
+    public ParticleSystem particles_army_minus;
+
     public Text workersText;
     public Text scientistsText;
     public Text armyText;
@@ -50,6 +61,8 @@ public class click : MonoBehaviour
 
     private int robots = 1;
 
+    private bool max = false;
+
     private int workers;
     private int scientists;
     private int army;
@@ -60,10 +73,25 @@ public class click : MonoBehaviour
     public int DelayAmount2;
     protected float Timer2;
 
+    public Button toggleButton;
+    public Text maxText;
+
+    private bool press = false;
+    public Sprite imageOn;
+    public Sprite imageOff;
+
+    void Start()
+    {
+        toggleButton.image.sprite = imageOff;
+    }
+
     private void Update()
     {
         decimalMoney += workers * Time.deltaTime;
         money = Mathf.RoundToInt(decimalMoney);
+
+        var emission = particles_money.emission;
+        emission.rateOverTime = workers/10;
 
         decimalResearch += scientists * Time.deltaTime;
         research = Mathf.RoundToInt(decimalResearch);
@@ -142,9 +170,23 @@ public class click : MonoBehaviour
     {
         if (0 < humansUnassigned)
         {
-            workers++;
-            humansUnassigned--;
-            humansAssigned++;
+            if (max == true)
+            {
+                workers += humansUnassigned;
+                humansAssigned += humansUnassigned;
+                humansUnassigned -= humansUnassigned;
+            }
+            else
+            {
+                workers++;
+                humansUnassigned--;
+                humansAssigned++;
+            }
+            particles_workers_plus.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
         }
     }   
 
@@ -152,9 +194,23 @@ public class click : MonoBehaviour
     {
         if (workers > 0)
         {
-            workers--;
-            humansUnassigned++;
-            humansAssigned--;
+            if (max == true)
+            {
+                workers -= humansUnassigned;
+                humansAssigned -= humansUnassigned;
+                humansUnassigned += humansUnassigned;
+            }
+            else
+            {
+                workers--;
+                humansUnassigned++;
+                humansAssigned--;
+            }
+            particles_workers_minus.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
         }
     }
 
@@ -162,9 +218,23 @@ public class click : MonoBehaviour
     {
         if (0 < humansUnassigned)
         {
-            scientists++;
-            humansUnassigned--;
-            humansAssigned++;
+            if (max == true)
+            {
+                scientists += humansUnassigned;
+                humansAssigned += humansUnassigned;
+                humansUnassigned -= humansUnassigned;
+            }
+            else
+            {
+                scientists++;
+                humansUnassigned--;
+                humansAssigned++;
+            }
+            particles_scientists_plus.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
         }
     }   
 
@@ -172,9 +242,23 @@ public class click : MonoBehaviour
     {
         if (scientists > 0)
         {
-            scientists--;
-            humansUnassigned++;
-            humansAssigned--;
+            if (max == true)
+            {
+                scientists -= humansUnassigned;
+                humansAssigned -= humansUnassigned;
+                humansUnassigned += humansUnassigned;
+            }
+            else
+            {
+                scientists--;
+                humansUnassigned++;
+                humansAssigned--;
+            }
+            particles_scientists_minus.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
         }
     }
 
@@ -182,9 +266,23 @@ public class click : MonoBehaviour
     {
         if (0 < humansUnassigned)
         {
-            army++;
-            humansUnassigned--;
-            humansAssigned++;
+            if (max == true)
+            {
+                army += humansUnassigned;
+                humansAssigned += humansUnassigned;
+                humansUnassigned -= humansUnassigned;
+            }
+            else
+            {
+                army++;
+                humansUnassigned--;
+                humansAssigned++;
+            }
+            particles_army_plus.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
         }
     }   
 
@@ -192,9 +290,41 @@ public class click : MonoBehaviour
     {
         if (army > 0)
         {
-            army--;
-            humansUnassigned++;
-            humansAssigned--;
+            if (max == true)
+            {
+                army -= humansUnassigned;
+                humansAssigned -= humansUnassigned;
+                humansUnassigned += humansUnassigned;
+            }
+            else
+            {
+                army--;
+                humansUnassigned++;
+                humansAssigned--;
+            }
+            particles_army_minus.Play(true);
+        }
+        else
+        {
+            camerashake.Shake();
+        }
+    }
+
+    public void OnToggleClick()
+    {
+        press = !press;
+
+        if (press == false)
+        {
+            toggleButton.image.sprite = imageOff;
+            maxText.text = "MAX: OFF";
+            max = false;
+        }
+        else
+        {
+            toggleButton.image.sprite = imageOn;
+            maxText.text = "MAX: ON";
+            max = true;
         }
     }
 

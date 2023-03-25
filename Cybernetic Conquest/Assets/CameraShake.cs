@@ -3,9 +3,9 @@ using UnityEngine;
 public class CameraShake : MonoBehaviour
 {
 
-    public Vector2 Amount = new Vector2(1f, 0f);
+    public Vector2 Amount = new Vector2(0.25f, 0f);
     public float Duration = 1f;
-    public float Speed = 10f;
+    public float Speed = 7.5f;
     public AnimationCurve Curve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
     public bool DeltaMovement = true;
 
